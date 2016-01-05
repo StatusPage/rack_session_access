@@ -3,7 +3,7 @@ module RackSessionAccess
     def set_rack_session(hash, host_with_port=nil)
       data = ::RackSessionAccess.encode(hash)
 
-      visit host_with_port + ::RackSessionAccess.edit_path
+      visit "#{host_with_port}#{::RackSessionAccess.edit_path}"
       has_content?("Update rack session")
       fill_in "data", :with => data
       click_button "Update"
@@ -11,7 +11,7 @@ module RackSessionAccess
     end
 
     def get_rack_session(host_with_port=nil)
-      visit host_with_port + ::RackSessionAccess.path + '.raw'
+      visit "#{host_with_port}#{::RackSessionAccess.edit_path}.raw"
       has_content?("Raw rack session data")
       raw_data = find(:xpath, '//body/pre').text
       ::RackSessionAccess.decode(raw_data)
