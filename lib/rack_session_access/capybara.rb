@@ -1,17 +1,17 @@
 module RackSessionAccess
   module Capybara
-    def set_rack_session(hash)
+    def set_rack_session(hash, host_with_port=nil)
       data = ::RackSessionAccess.encode(hash)
 
-      visit ::RackSessionAccess.edit_path
+      visit host_with_port + ::RackSessionAccess.edit_path
       has_content?("Update rack session")
       fill_in "data", :with => data
       click_button "Update"
       has_content?("Rack session data")
     end
 
-    def get_rack_session
-      visit ::RackSessionAccess.path + '.raw'
+    def get_rack_session(host_with_port=nil)
+      visit host_with_port + ::RackSessionAccess.path + '.raw'
       has_content?("Raw rack session data")
       raw_data = find(:xpath, '//body/pre').text
       ::RackSessionAccess.decode(raw_data)
